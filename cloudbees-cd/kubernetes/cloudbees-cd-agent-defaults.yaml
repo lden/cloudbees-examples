@@ -9,7 +9,7 @@ images:
   ## The `imageRepository` in the `images.registry` to pull the agent image from.
   imageRepository: "cbflow-agent"
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2026.03.0.185227_3.2.235_20260321"
+  tag: "2026.08.11.186887_3.2.264_20260813"
 
   ## The image pull policy to use:
   pullPolicy: IfNotPresent

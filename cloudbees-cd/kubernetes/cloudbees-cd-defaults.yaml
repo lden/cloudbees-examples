@@ -24,7 +24,7 @@ images:
   registry: "docker.io/cloudbees"
 
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2026.03.0.185227_3.2.235_20260321"
+  tag: "2026.08.11.186887_3.2.264_20260813"
 
   ## The image pull policy to use.
   pullPolicy: IfNotPresent
@@ -133,7 +133,7 @@ server:
     port: 2181
 
   ## Interpreted as if passed to the CloudBees ecconfigure utility within the container.
-  ecconfigure: "--serverInitMemoryMB=4096 --serverMaxMemoryMB=4096"
+  ecconfigure: "--serverInitMemoryMB=4096 --serverMaxMemoryMB=4096 --wrapperJavaAdditional=10000=-Djute.maxbuffer=1048575"
 
   ## Specify the resources to request for this component.
   resources:
@@ -1307,11 +1307,17 @@ zookeeper:
     ## Container repository to pull ZooKeeper image from.
     repository: docker.io/cloudbees/cbflow-tools
     ## Zookeeper image tag to pull.
-    tag: "2026.03.0.185227_3.2.235_20260321"
+    tag: "2026.08.11.186887_3.2.264_20260813"
     ## Added Image repository for global values support
     imageRepository: cbflow-tools
   fullnameOverride: zookeeper
   replicaCount: 3
+
+  env:
+    ## Extra JVM flags passed to the ZooKeeper process.
+    ## To override jute.maxbuffer, set e.g.: "-Djute.maxbuffer=1048575"
+    ## This must match the --wrapperJavaAdditional flag in server.ecconfigure above.
+    ZK_EXTRA_JVM_FLAGS: ""
 
   podLabels:
     ownerApp: "cloudbees-flow"
@@ -1367,7 +1373,8 @@ ingress-nginx:
   ## `ingress-nginx.enabled: true` installs the following ingress-nginx controller:
   ## https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx
   ## (OPTIONAL) Enable this section if you don't have an existing ingress-nginx controller installation.
-  enabled: true
+  ## DEPRECATED: disabled by default as of chart v2.39.0. Use gatewayApi instead.
+  enabled: false
   controller:
     service:
       externalTrafficPolicy: Local
